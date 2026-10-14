@@ -502,7 +502,6 @@
     color:var(--text);
   }
   h3.section-head{
-    font-size:15px;
     font-weight:700;
     margin:24px 0 12px;
     color:var(--text);
@@ -658,26 +657,26 @@
       <p class="subtitle">Master the tense changes in reported speech</p>
 
       <ul class="instructions">
-        <li>30 technology-themed questions per level.</li>
-        <li>You have <strong>20 seconds</strong> for each question.</li>
-        <li>See an explanation if you get it wrong.</li>
+        <li>Level 1: 30 multiple-choice questions (20s each).</li>
+        <li>Level 2: 30 fill-in-the-blank questions (30s each).</li>
+        <li>See a detailed explanation if you get it wrong.</li>
         <li>Choose a level below to begin.</li>
       </ul>
 
       <div class="level-chooser">
         <button class="level-card" data-level="1">
-          <span class="lvl-tag">LEVEL 1</span>
+          <span class="lvl-tag">LEVEL 1 · 20s</span>
           <div class="lvl-name">Multiple Choice</div>
           <div class="lvl-desc">Pick A, B, C or D to complete each reported sentence.</div>
         </button>
         <button class="level-card" data-level="2">
-          <span class="lvl-tag">LEVEL 2</span>
+          <span class="lvl-tag">LEVEL 2 · 30s</span>
           <div class="lvl-name">Fill in the Blank</div>
           <div class="lvl-desc">Type the missing verb form yourself. Harder!</div>
         </button>
       </div>
 
-      <p class="meta-line">Time per question: 20s</p>
+      <p class="meta-line">Level 1: 20s per question &nbsp;|&nbsp; Level 2: 30s per question</p>
       <p id="history-line" class="history-line" style="display:none;"></p>
     </div>
   </section>
@@ -727,13 +726,14 @@
 <script>
 /* =========================================================
    === DATA: LEVEL 1 — MULTIPLE CHOICE (technology themed)
+   Correct answers distributed: A=8, B=7, C=7, D=8
    ========================================================= */
 const LEVEL1 = [
   { id:1,
     direct:`"I am developing a new mobile app that helps students learn foreign languages more efficiently," said Sophia.`,
     reported:`Sophia said (that) she ______ a new mobile app that helped students learn foreign languages more efficiently.`,
-    options:["is developing","was developing","has been developing","develops"],
-    answer:"B", rule:"Present continuous ➜ Past continuous",
+    options:["is developing","has been developing","was developing","develops"],
+    answer:"C", rule:"Present continuous ➜ Past continuous",
     explanation:`"Am developing" is present continuous. It changes to "was developing" in reported speech.` },
 
   { id:2,
@@ -760,50 +760,50 @@ const LEVEL1 = [
   { id:5,
     direct:`"The company will launch its new smartphone at the end of this month," the CEO announced.`,
     reported:`The CEO announced (that) the company ______ its new smartphone at the end of that month.`,
-    options:["will launch","would launch","launches","was launching"],
-    answer:"B", rule:"Will ➜ Would",
+    options:["will launch","launches","would launch","was launching"],
+    answer:"C", rule:"Will ➜ Would",
     explanation:`"Will" changes to "would" in reported speech.` },
 
   { id:6,
     direct:`"You can access all the files from any device with a stable internet connection," the IT support said.`,
     reported:`The IT support said (that) I ______ access all the files from any device with a stable internet connection.`,
-    options:["can","may","could","would"],
-    answer:"C", rule:"Can ➜ Could",
+    options:["can","may","would","could"],
+    answer:"D", rule:"Can ➜ Could",
     explanation:`"Can" changes to "could" in reported speech.` },
 
   { id:7,
     direct:`"The engineers have been working on this project for more than six months," said the team leader.`,
     reported:`The team leader said (that) the engineers ______ on that project for more than six months.`,
-    options:["have been working","had been working","were working","worked"],
-    answer:"B", rule:"Present perfect continuous ➜ Past perfect continuous",
+    options:["had been working","have been working","were working","worked"],
+    answer:"A", rule:"Present perfect continuous ➜ Past perfect continuous",
     explanation:`"Have been working" → "had been working".` },
 
   { id:8,
     direct:`"I saw a very interesting documentary about quantum computers last night," said Rachel.`,
     reported:`Rachel said (that) she ______ a very interesting documentary about quantum computers the night before.`,
-    options:["saw","has seen","had seen","was seeing"],
-    answer:"C", rule:"Simple past ➜ Past perfect",
+    options:["saw","had seen","has seen","was seeing"],
+    answer:"B", rule:"Simple past ➜ Past perfect",
     explanation:`"Saw" is simple past. It becomes "had seen". "Last night" → "the night before".` },
 
   { id:9,
     direct:`"Our team is going to release a new update next week," the developer told us.`,
     reported:`The developer told us (that) their team ______ to release a new update the following week.`,
-    options:["is going","was going","has gone","went"],
-    answer:"B", rule:"Present continuous ➜ Past continuous",
+    options:["is going","has gone","was going","went"],
+    answer:"C", rule:"Present continuous ➜ Past continuous",
     explanation:`"Is going" is present continuous → "was going".` },
 
   { id:10,
     direct:`"I must finish debugging this program before the deadline tomorrow," said Mark.`,
     reported:`Mark said (that) he ______ finish debugging that program before the deadline the next day.`,
-    options:["must","had to","has to","would have to"],
-    answer:"B", rule:"Must ➜ Had to",
+    options:["must","has to","would have to","had to"],
+    answer:"D", rule:"Must ➜ Had to",
     explanation:`"Must" changes to "had to" in reported speech.` },
 
   { id:11,
     direct:`"Scientists may discover a cure for this disease using new gene-editing tools," the reporter said.`,
     reported:`The reporter said (that) scientists ______ discover a cure for that disease using new gene-editing tools.`,
-    options:["may","might","can","could"],
-    answer:"B", rule:"May ➜ Might",
+    options:["might","may","can","could"],
+    answer:"A", rule:"May ➜ Might",
     explanation:`"May" changes to "might" in reported speech.` },
 
   { id:12,
@@ -816,22 +816,22 @@ const LEVEL1 = [
   { id:13,
     direct:`"The robot can perform complex surgical operations with incredible precision," the doctor said.`,
     reported:`The doctor said (that) the robot ______ perform complex surgical operations with incredible precision.`,
-    options:["can","could","might","would"],
-    answer:"B", rule:"Can ➜ Could",
+    options:["can","might","could","would"],
+    answer:"C", rule:"Can ➜ Could",
     explanation:`"Can" changes to "could" in reported speech.` },
 
   { id:14,
     direct:`"We were discussing the future of electric cars when the meeting ended," said Mr Brown.`,
     reported:`Mr Brown said (that) they ______ the future of electric cars when the meeting ended.`,
-    options:["were discussing","had been discussing","discussed","have been discussing"],
-    answer:"B", rule:"Past continuous ➜ Past perfect continuous",
+    options:["were discussing","discussed","have been discussing","had been discussing"],
+    answer:"D", rule:"Past continuous ➜ Past perfect continuous",
     explanation:`"Were discussing" → "had been discussing".` },
 
   { id:15,
     direct:`"I will send you the digital report by email this afternoon," said Jennifer.`,
     reported:`Jennifer said (that) she ______ me the digital report by email that afternoon.`,
-    options:["will send","would send","sends","was sending"],
-    answer:"B", rule:"Will ➜ Would",
+    options:["would send","will send","sends","was sending"],
+    answer:"A", rule:"Will ➜ Would",
     explanation:`"Will send" → "would send".` },
 
   { id:16,
@@ -844,50 +844,50 @@ const LEVEL1 = [
   { id:17,
     direct:`"We have already installed the latest security software on all the computers," the technician said.`,
     reported:`The technician said (that) they ______ the latest security software on all the computers.`,
-    options:["have already installed","had already installed","already installed","were already installing"],
-    answer:"B", rule:"Present perfect ➜ Past perfect",
+    options:["have already installed","already installed","had already installed","were already installing"],
+    answer:"C", rule:"Present perfect ➜ Past perfect",
     explanation:`"Have installed" → "had installed".` },
 
   { id:18,
     direct:`"I am thinking about buying a smartwatch that can monitor my health," said Peter.`,
     reported:`Peter said (that) he ______ about buying a smartwatch that could monitor his health.`,
-    options:["is thinking","was thinking","has thought","thought"],
-    answer:"B", rule:"Present continuous ➜ Past continuous",
+    options:["is thinking","has thought","thought","was thinking"],
+    answer:"D", rule:"Present continuous ➜ Past continuous",
     explanation:`"Am thinking" → "was thinking".` },
 
   { id:19,
     direct:`"The internet connection was very slow yesterday, so I couldn't finish my work," said Linda.`,
     reported:`Linda said (that) the internet connection ______ very slow the day before, so she couldn't finish her work.`,
-    options:["was","had been","has been","is"],
-    answer:"B", rule:"Simple past ➜ Past perfect",
+    options:["had been","was","has been","is"],
+    answer:"A", rule:"Simple past ➜ Past perfect",
     explanation:`"Was" is simple past. It becomes "had been" in reported speech.` },
 
   { id:20,
     direct:`"You should back up your important files to the cloud regularly," the expert advised.`,
     reported:`The expert said (that) I ______ back up my important files to the cloud regularly.`,
-    options:["should","would","must","could"],
-    answer:"A", rule:"No change (should)",
+    options:["would","should","must","could"],
+    answer:"B", rule:"No change (should)",
     explanation:`"Should" stays the same in reported speech.` },
 
   { id:21,
     direct:`"Our company is developing a new AI chatbot that can understand many languages," said the spokesperson.`,
     reported:`The spokesperson said (that) their company ______ a new AI chatbot that could understand many languages.`,
-    options:["is developing","was developing","has developed","developed"],
-    answer:"B", rule:"Present continuous ➜ Past continuous",
+    options:["is developing","has developed","was developing","developed"],
+    answer:"C", rule:"Present continuous ➜ Past continuous",
     explanation:`"Is developing" → "was developing".` },
 
   { id:22,
     direct:`"The students had finished their online coding course before the summer holiday began," said the teacher.`,
     reported:`The teacher said (that) the students ______ their online coding course before the summer holiday began.`,
-    options:["have finished","had finished","finished","were finishing"],
-    answer:"B", rule:"No change (past perfect)",
+    options:["have finished","finished","were finishing","had finished"],
+    answer:"D", rule:"No change (past perfect)",
     explanation:`Past perfect "had finished" stays the same.` },
 
   { id:23,
     direct:`"I can fix this laptop in less than an hour," the repairman told me.`,
     reported:`The repairman told me (that) he ______ fix that laptop in less than an hour.`,
-    options:["can","could","may","might"],
-    answer:"B", rule:"Can ➜ Could",
+    options:["could","can","may","might"],
+    answer:"A", rule:"Can ➜ Could",
     explanation:`"Can" → "could".` },
 
   { id:24,
@@ -900,29 +900,29 @@ const LEVEL1 = [
   { id:25,
     direct:`"She has been designing video games since she graduated from university," said her colleague.`,
     reported:`Her colleague said (that) she ______ video games since she had graduated from university.`,
-    options:["has been designing","had been designing","was designing","designed"],
-    answer:"B", rule:"Present perfect continuous ➜ Past perfect continuous",
+    options:["has been designing","was designing","had been designing","designed"],
+    answer:"C", rule:"Present perfect continuous ➜ Past perfect continuous",
     explanation:`"Has been designing" → "had been designing".` },
 
   { id:26,
     direct:`"The government must invest more money in cybersecurity to protect personal data," the expert argued.`,
     reported:`The expert argued (that) the government ______ invest more money in cybersecurity to protect personal data.`,
-    options:["must","had to","has to","would"],
-    answer:"B", rule:"Must ➜ Had to",
+    options:["must","has to","would","had to"],
+    answer:"D", rule:"Must ➜ Had to",
     explanation:`"Must" → "had to".` },
 
   { id:27,
     direct:`"I may upgrade my computer next year if the prices drop," said Alex.`,
     reported:`Alex said (that) he ______ upgrade his computer the following year if the prices dropped.`,
-    options:["may","might","can","could"],
-    answer:"B", rule:"May ➜ Might",
+    options:["might","may","can","could"],
+    answer:"A", rule:"May ➜ Might",
     explanation:`"May" → "might".` },
 
   { id:28,
     direct:`"The satellite was sending clear images back to Earth before it lost signal," the scientist explained.`,
     reported:`The scientist explained (that) the satellite ______ clear images back to Earth before it lost signal.`,
-    options:["was sending","had been sending","sent","has been sending"],
-    answer:"B", rule:"Past continuous ➜ Past perfect continuous",
+    options:["was sending","sent","has been sending","had been sending"],
+    answer:"D", rule:"Past continuous ➜ Past perfect continuous",
     explanation:`"Was sending" → "had been sending".` },
 
   { id:29,
@@ -935,8 +935,8 @@ const LEVEL1 = [
   { id:30,
     direct:`"I have never used this kind of 3D printer before," said the young designer.`,
     reported:`The young designer said (that) he ______ that kind of 3D printer before.`,
-    options:["has never used","had never used","never used","was never using"],
-    answer:"B", rule:"Present perfect ➜ Past perfect",
+    options:["had never used","has never used","never used","was never using"],
+    answer:"A", rule:"Present perfect ➜ Past perfect",
     explanation:`"Have never used" → "had never used".` }
 ];
 
@@ -1127,9 +1127,12 @@ const LEVEL2 = [
 ];
 
 /* =========================================================
-   === CONSTANTS ===
+   === TIME LIMITS PER LEVEL ===
+   Level 1 (MCQ):       20 seconds
+   Level 2 (Fill-in):   30 seconds
    ========================================================= */
-const TIME_PER_Q = 20;
+const TIME_PER_LEVEL = { 1: 20, 2: 30 };
+
 const RING_CIRC = 2 * Math.PI * 26;
 const LETTERS = ["A", "B", "C", "D"];
 
@@ -1137,13 +1140,14 @@ const LETTERS = ["A", "B", "C", "D"];
    === GAME STATE ===
    ========================================================= */
 const state = {
-  level: 1,               // 1 = MCQ, 2 = fill-in
-  questions: [],          // active question array
+  level: 1,
+  questions: [],
   currentIndex: 0,
   score: 0,
-  answers: [],            // { qIndex, chosenText|null, correct, timedOut }
+  answers: [],
   timerId: null,
-  timeLeft: TIME_PER_Q,
+  timeLeft: 20,
+  timeLimit: 20,
   locked: false,
   startTime: 0
 };
@@ -1196,7 +1200,7 @@ document.querySelectorAll(".level-card").forEach(btn => {
 
 function showHistory() {
   try {
-    const history = JSON.parse(localStorage.getItem("rs_game_history_v2") || "[]");
+    const history = JSON.parse(localStorage.getItem("rs_game_history_v3") || "[]");
     if (history.length === 0) return;
     const last = history[history.length - 1];
     el.historyLine.textContent = `Last score — Level ${last.level}: ${last.score}/30 (${last.date})`;
@@ -1206,14 +1210,14 @@ function showHistory() {
 
 function saveResult(level, score) {
   try {
-    const history = JSON.parse(localStorage.getItem("rs_game_history_v2") || "[]");
+    const history = JSON.parse(localStorage.getItem("rs_game_history_v3") || "[]");
     history.push({
       level,
       score,
       date: new Date().toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })
     });
     while (history.length > 5) history.shift();
-    localStorage.setItem("rs_game_history_v2", JSON.stringify(history));
+    localStorage.setItem("rs_game_history_v3", JSON.stringify(history));
   } catch (e) { /* ignore */ }
 }
 
@@ -1227,6 +1231,7 @@ function startGame(level) {
   state.score = 0;
   state.answers = [];
   state.locked = false;
+  state.timeLimit = TIME_PER_LEVEL[level] || 20;
   showScreen("quiz");
   renderQuestion();
 }
@@ -1234,19 +1239,16 @@ function startGame(level) {
 function renderQuestion() {
   const q = state.questions[state.currentIndex];
 
-  // header
   const lvlLabel = state.level === 1 ? "Multiple Choice" : "Fill in the Blank";
   el.counter.innerHTML = `Question ${state.currentIndex + 1} of ${state.questions.length}
-    <span class="lvl-badge">L${state.level} · ${lvlLabel}</span>`;
+    <span class="lvl-badge">L${state.level} · ${lvlLabel} · ${state.timeLimit}s</span>`;
 
-  // sentences
   el.direct.textContent = q.direct;
   el.reported.innerHTML = q.reported.replace(
     "______",
     `<span class="blank">______</span>`
   );
 
-  // answer area
   el.answerArea.innerHTML = "";
   if (state.level === 1) {
     renderMCQOptions(q);
@@ -1254,12 +1256,10 @@ function renderQuestion() {
     renderFillInput(q);
   }
 
-  // reset feedback
   el.feedback.className = "feedback";
   el.feedback.innerHTML = "";
 
-  // reset timer
-  state.timeLeft = TIME_PER_Q;
+  state.timeLeft = state.timeLimit;
   state.locked = false;
   updateTimerDisplay();
   startTimer();
@@ -1381,7 +1381,6 @@ function renderFillInput(q) {
   });
   el.answerArea.appendChild(wrap);
 
-  // focus the input
   setTimeout(() => input.focus(), 50);
 }
 
@@ -1469,12 +1468,12 @@ function revealFill(userAnswer, timedOut) {
 }
 
 /* =========================================================
-   === TIMER ===
+   === TIMER (uses state.timeLimit so L1=20s, L2=30s) ===
    ========================================================= */
 function startTimer() {
   clearInterval(state.timerId);
   state.startTime = Date.now();
-  const duration = TIME_PER_Q * 1000;
+  const duration = state.timeLimit * 1000;
 
   state.timerId = setInterval(() => {
     const elapsed = Date.now() - state.startTime;
@@ -1492,7 +1491,7 @@ function updateTimerDisplay() {
   const secs = Math.ceil(state.timeLeft);
   el.timerText.textContent = secs;
 
-  const ratio = state.timeLeft / TIME_PER_Q;
+  const ratio = state.timeLeft / state.timeLimit;
   const offset = RING_CIRC * (1 - ratio);
   el.ringFg.style.strokeDashoffset = offset;
 
@@ -1508,25 +1507,17 @@ function handleTimeout() {
   if (state.locked) return;
   state.locked = true;
 
+  state.answers.push({
+    qIndex: state.currentIndex,
+    chosenText: null,
+    chosenIndex: null,
+    correct: false,
+    timedOut: true
+  });
+
   if (state.level === 1) {
-    // MCQ timeout
-    state.answers.push({
-      qIndex: state.currentIndex,
-      chosenText: null,
-      chosenIndex: null,
-      correct: false,
-      timedOut: true
-    });
     revealMCQ(null, true);
   } else {
-    // Fill-in timeout
-    state.answers.push({
-      qIndex: state.currentIndex,
-      chosenText: null,
-      chosenIndex: null,
-      correct: false,
-      timedOut: true
-    });
     revealFill("", true);
   }
 }
@@ -1598,14 +1589,14 @@ function showSummary() {
     html += `<h3 class="section-head">Questions to Review (${wrongAnswers.length})</h3>`;
     wrongAnswers.forEach(ans => {
       const q = state.questions[ans.qIndex];
-      let correctText, fullSentence;
+      let correctText;
       if (state.level === 1) {
         const correctIndex = LETTERS.indexOf(q.answer);
         correctText = q.options[correctIndex];
       } else {
         correctText = q.answers[0];
       }
-      fullSentence = q.reported.replace("______", correctText);
+      const fullSentence = q.reported.replace("______", correctText);
 
       html += `<div class="review-item">`;
       html += `<div class="q-label">Question ${q.id} · Level ${state.level}</div>`;
@@ -1622,7 +1613,6 @@ function showSummary() {
     });
   }
 
-  // Weak areas
   if (wrongAnswers.length > 0) {
     const counts = {};
     wrongAnswers.forEach(a => {
@@ -1663,7 +1653,6 @@ function showSummary() {
 
   el.reviewSection.innerHTML = html;
 
-  // reset review-all
   el.allQuestions.classList.remove("show");
   el.allQuestions.innerHTML = "";
   el.btnReviewAll.textContent = "Review All Questions";
