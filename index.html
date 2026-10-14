@@ -1,0 +1,1261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Reported Speech: Tense Change Challenge</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bg:#f8f9fb;
+    --card:#ffffff;
+    --primary:#4f46e5;
+    --primary-dark:#4338ca;
+    --correct:#16a34a;
+    --correct-bg:#ecfdf5;
+    --wrong:#dc2626;
+    --wrong-bg:#fef2f2;
+    --warn:#ea580c;
+    --text:#1f2937;
+    --muted:#6b7280;
+    --border:#e5e7eb;
+    --shadow:0 10px 30px rgba(15,23,42,.08);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+    padding:24px 16px 60px;
+    line-height:1.55;
+  }
+  .app{width:100%;max-width:720px;}
+
+  /* ---------- Screens ---------- */
+  .screen{display:none;animation:fade .28s ease;}
+  .screen.active{display:block;}
+  @keyframes fade{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
+
+  /* ---------- Card ---------- */
+  .card{
+    background:var(--card);
+    border-radius:16px;
+    box-shadow:var(--shadow);
+    padding:28px 24px;
+    border:1px solid var(--border);
+  }
+
+  /* ---------- Start screen ---------- */
+  .title{
+    font-size:26px;
+    font-weight:700;
+    text-align:center;
+    margin:0 0 6px;
+    color:var(--primary-dark);
+  }
+  .subtitle{
+    text-align:center;
+    color:var(--muted);
+    margin:0 0 22px;
+    font-size:15px;
+  }
+  .instructions{
+    list-style:none;
+    padding:0;
+    margin:0 0 22px;
+  }
+  .instructions li{
+    padding:10px 14px;
+    background:#f3f4f6;
+    border-radius:10px;
+    margin-bottom:8px;
+    font-size:15px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .instructions li::before{
+    content:"•";
+    color:var(--primary);
+    font-weight:700;
+    font-size:20px;
+    line-height:1;
+  }
+  .meta-line{
+    text-align:center;
+    color:var(--muted);
+    font-size:13px;
+    margin:0 0 20px;
+  }
+  .history-line{
+    text-align:center;
+    color:var(--muted);
+    font-size:13px;
+    margin:14px 0 0;
+    font-style:italic;
+  }
+
+  /* ---------- Buttons ---------- */
+  .btn{
+    font-family:inherit;
+    font-size:16px;
+    font-weight:600;
+    border:none;
+    border-radius:12px;
+    padding:14px 22px;
+    cursor:pointer;
+    transition:transform .12s ease, background .18s ease, box-shadow .18s ease;
+    min-height:48px;
+  }
+  .btn-primary{
+    background:var(--primary);
+    color:#fff;
+    width:100%;
+    box-shadow:0 6px 16px rgba(79,70,229,.25);
+  }
+  .btn-primary:hover{background:var(--primary-dark);}
+  .btn-primary:active{transform:scale(.98);}
+  .btn-secondary{
+    background:#eef2ff;
+    color:var(--primary-dark);
+    width:100%;
+    margin-top:10px;
+  }
+  .btn-secondary:hover{background:#e0e7ff;}
+
+  /* ---------- Quiz header ---------- */
+  .quiz-header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:18px;
+    gap:12px;
+  }
+  .counter{
+    font-size:14px;
+    font-weight:600;
+    color:var(--muted);
+    letter-spacing:.02em;
+  }
+  .timer-wrap{
+    position:relative;
+    width:60px;
+    height:60px;
+    flex-shrink:0;
+  }
+  .timer-ring{
+    width:60px;height:60px;
+    transform:rotate(-90deg);
+  }
+  .ring-bg{
+    fill:none;
+    stroke:#e5e7eb;
+    stroke-width:5;
+  }
+  .ring-fg{
+    fill:none;
+    stroke:var(--primary);
+    stroke-width:5;
+    stroke-linecap:round;
+    stroke-dasharray:163.36;
+    stroke-dashoffset:0;
+    transition:stroke .3s ease;
+  }
+  .timer-text{
+    position:absolute;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:700;
+    font-size:16px;
+    color:var(--primary);
+    transition:color .3s ease;
+  }
+
+  /* ---------- Question ---------- */
+  .direct-speech{
+    font-size:18px;
+    font-weight:600;
+    color:var(--text);
+    background:#eef2ff;
+    border-left:4px solid var(--primary);
+    padding:14px 16px;
+    border-radius:10px;
+    margin:0 0 14px;
+  }
+  .reported-speech{
+    font-size:18px;
+    color:var(--text);
+    padding:0 4px 18px;
+    margin:0;
+  }
+  .blank{
+    display:inline-block;
+    min-width:110px;
+    border-bottom:2px solid var(--primary);
+    color:var(--primary);
+    font-weight:600;
+    text-align:center;
+  }
+
+  /* ---------- Options ---------- */
+  .options{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+  }
+  .option-btn{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    text-align:left;
+    background:#fff;
+    border:2px solid var(--border);
+    border-radius:12px;
+    padding:14px 16px;
+    font-family:inherit;
+    font-size:16px;
+    color:var(--text);
+    cursor:pointer;
+    transition:border-color .15s ease, background .15s ease, transform .12s ease;
+    min-height:52px;
+  }
+  .option-btn:hover:not(:disabled){
+    border-color:var(--primary);
+    background:#f5f3ff;
+  }
+  .option-btn:disabled{cursor:default;}
+  .option-btn .letter{
+    flex-shrink:0;
+    width:28px;height:28px;
+    border-radius:50%;
+    background:#f3f4f6;
+    color:var(--muted);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:700;
+    font-size:14px;
+    transition:background .15s, color .15s;
+  }
+  .option-btn.correct{
+    border-color:var(--correct);
+    background:var(--correct-bg);
+  }
+  .option-btn.correct .letter{background:var(--correct);color:#fff;}
+  .option-btn.wrong{
+    border-color:var(--wrong);
+    background:var(--wrong-bg);
+  }
+  .option-btn.wrong .letter{background:var(--wrong);color:#fff;}
+
+  /* ---------- Feedback ---------- */
+  .feedback{
+    margin-top:20px;
+    border-radius:12px;
+    padding:16px 18px;
+    display:none;
+    animation:fade .3s ease;
+  }
+  .feedback.show{display:block;}
+  .feedback.is-correct{background:var(--correct-bg);border:1px solid #bbf7d0;}
+  .feedback.is-wrong{background:var(--wrong-bg);border:1px solid #fecaca;}
+
+  .fb-header{
+    font-size:16px;
+    font-weight:700;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin-bottom:10px;
+  }
+  .feedback.is-correct .fb-header{color:var(--correct);}
+  .feedback.is-wrong .fb-header{color:var(--wrong);}
+
+  .fb-answer{
+    font-size:15px;
+    margin:0 0 10px;
+    color:var(--text);
+  }
+  .fb-answer strong{color:var(--primary-dark);}
+  .fb-why{
+    font-size:14px;
+    color:#374151;
+    margin:0 0 12px;
+    line-height:1.6;
+  }
+  .fb-rule{
+    display:inline-block;
+    font-size:13px;
+    font-weight:600;
+    background:#fff;
+    border:1px dashed var(--primary);
+    color:var(--primary-dark);
+    padding:6px 12px;
+    border-radius:8px;
+    margin-bottom:14px;
+  }
+  .fb-next{
+    width:100%;
+    background:var(--primary);
+    color:#fff;
+    border:none;
+    border-radius:10px;
+    padding:13px;
+    font-size:16px;
+    font-weight:600;
+    font-family:inherit;
+    cursor:pointer;
+    transition:background .18s;
+  }
+  .fb-next:hover{background:var(--primary-dark);}
+
+  /* ---------- Summary ---------- */
+  .score-box{
+    text-align:center;
+    padding:24px 16px;
+    background:linear-gradient(135deg,#eef2ff 0%,#f5f3ff 100%);
+    border-radius:14px;
+    margin-bottom:22px;
+  }
+  .score-number{
+    font-size:44px;
+    font-weight:700;
+    color:var(--primary-dark);
+    line-height:1;
+    margin-bottom:6px;
+  }
+  .score-percent{
+    font-size:14px;
+    color:var(--muted);
+    margin-bottom:10px;
+  }
+  .score-message{
+    font-size:15px;
+    font-weight:600;
+    color:var(--text);
+  }
+  h3.section-head{
+    font-size:16px;
+    font-weight:700;
+    margin:22px 0 12px;
+    color:var(--text);
+  }
+  .review-item{
+    background:#fff;
+    border:1px solid var(--border);
+    border-left:4px solid var(--wrong);
+    border-radius:10px;
+    padding:14px 16px;
+    margin-bottom:10px;
+    font-size:14px;
+  }
+  .review-item .q-label{
+    font-weight:700;
+    color:var(--muted);
+    font-size:12px;
+    letter-spacing:.05em;
+    text-transform:uppercase;
+    margin-bottom:6px;
+  }
+  .review-item .q-direct{
+    font-style:italic;
+    color:#374151;
+    margin:0 0 8px;
+  }
+  .review-item .q-choice{
+    color:var(--wrong);
+    margin:2px 0;
+  }
+  .review-item .q-correct{
+    color:var(--correct);
+    font-weight:600;
+    margin:2px 0;
+  }
+  .review-item .q-rule{
+    display:inline-block;
+    font-size:12px;
+    background:#eef2ff;
+    color:var(--primary-dark);
+    padding:3px 8px;
+    border-radius:6px;
+    margin-top:8px;
+    font-weight:600;
+  }
+  .review-item .q-explain{
+    font-size:13px;
+    color:#4b5563;
+    margin-top:8px;
+    line-height:1.5;
+  }
+  .weak-list{
+    list-style:none;
+    padding:0;
+    margin:0 0 14px;
+  }
+  .weak-list li{
+    display:flex;
+    justify-content:space-between;
+    padding:10px 14px;
+    background:#fff;
+    border:1px solid var(--border);
+    border-radius:10px;
+    margin-bottom:8px;
+    font-size:14px;
+    font-weight:500;
+  }
+  .weak-list .count{
+    color:var(--wrong);
+    font-weight:700;
+  }
+  .tip-box{
+    background:#fffbeb;
+    border:1px solid #fde68a;
+    border-radius:10px;
+    padding:14px 16px;
+    font-size:14px;
+    color:#78350f;
+    margin-bottom:10px;
+  }
+  .tip-box strong{color:#92400e;}
+  .perfect-msg{
+    background:var(--correct-bg);
+    border:1px solid #bbf7d0;
+    color:var(--correct);
+    padding:16px;
+    border-radius:10px;
+    text-align:center;
+    font-weight:600;
+    margin-bottom:16px;
+  }
+  .all-questions{
+    margin-top:16px;
+    display:none;
+  }
+  .all-questions.show{display:block;}
+  .all-q-item{
+    background:#fff;
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:12px 14px;
+    margin-bottom:8px;
+    font-size:13.5px;
+  }
+  .all-q-item .direct{color:#374151;font-style:italic;}
+  .all-q-item .correct-line{color:var(--correct);font-weight:600;margin-top:4px;}
+  .all-q-item .rule-line{
+    display:inline-block;
+    font-size:11px;
+    background:#eef2ff;
+    color:var(--primary-dark);
+    padding:2px 7px;
+    border-radius:5px;
+    margin-top:6px;
+    font-weight:600;
+  }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width:520px){
+    body{padding:16px 12px 50px;}
+    .card{padding:22px 18px;border-radius:14px;}
+    .title{font-size:22px;}
+    .direct-speech,.reported-speech{font-size:16px;}
+    .option-btn{font-size:15px;padding:12px 14px;}
+    .score-number{font-size:38px;}
+  }
+</style>
+</head>
+<body>
+
+<main class="app">
+
+  <!-- ================= START SCREEN ================= -->
+  <section id="screen-start" class="screen active">
+    <div class="card">
+      <h1 class="title">Reported Speech:<br>Tense Change Challenge</h1>
+      <p class="subtitle">Master the tense changes in reported speech</p>
+
+      <ul class="instructions">
+        <li>30 questions about reported speech.</li>
+        <li>You have <strong>20 seconds</strong> for each question.</li>
+        <li>Choose the correct answer (A, B, C or D).</li>
+        <li>You will see an explanation if you are wrong.</li>
+      </ul>
+
+      <p class="meta-line">Total questions: 30 &nbsp;|&nbsp; Time per question: 20s</p>
+
+      <button id="btn-start" class="btn btn-primary">Start Game</button>
+      <p id="history-line" class="history-line" style="display:none;"></p>
+    </div>
+  </section>
+
+  <!-- ================= QUIZ SCREEN ================= -->
+  <section id="screen-quiz" class="screen">
+    <div class="card">
+      <div class="quiz-header">
+        <span id="counter" class="counter">Question 1 of 30</span>
+        <div class="timer-wrap">
+          <svg class="timer-ring" viewBox="0 0 60 60" aria-hidden="true">
+            <circle class="ring-bg" cx="30" cy="30" r="26"></circle>
+            <circle id="ring-fg" class="ring-fg" cx="30" cy="30" r="26"></circle>
+          </svg>
+          <span id="timer-text" class="timer-text">20</span>
+        </div>
+      </div>
+
+      <p id="direct" class="direct-speech"></p>
+      <p id="reported" class="reported-speech"></p>
+
+      <div id="options" class="options" role="group" aria-label="Answer options"></div>
+
+      <div id="feedback" class="feedback" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <!-- ================= SUMMARY SCREEN ================= -->
+  <section id="screen-summary" class="screen">
+    <div class="card">
+      <div class="score-box">
+        <div id="score-number" class="score-number">0 / 30</div>
+        <div id="score-percent" class="score-percent">0%</div>
+        <div id="score-message" class="score-message"></div>
+      </div>
+
+      <div id="review-section"></div>
+
+      <button id="btn-again" class="btn btn-primary" style="margin-top:16px;">Play Again</button>
+      <button id="btn-review-all" class="btn btn-secondary">Review All Questions</button>
+      <div id="all-questions" class="all-questions"></div>
+    </div>
+  </section>
+
+</main>
+
+<script>
+/* =========================================================
+   === DATA ===
+   ========================================================= */
+const QUESTIONS = [
+  {
+    id: 1,
+    direct: `"I like chocolate," said Amy.`,
+    reported: `Amy said (that) she ______ chocolate.`,
+    options: ["likes", "liked", "is liking", "has liked"],
+    answer: "B",
+    rule: "Simple present ➜ Simple past",
+    explanation: `"Like" is simple present. When "said" is used, simple present becomes simple past: "liked".`
+  },
+  {
+    id: 2,
+    direct: `"My brother plays the guitar," said Ken.`,
+    reported: `Ken said (that) his brother ______ the guitar.`,
+    options: ["played", "plays", "is playing", "has played"],
+    answer: "A",
+    rule: "Simple present ➜ Simple past",
+    explanation: `"Plays" is simple present. It becomes "played" in reported speech. "My" also changes to "his".`
+  },
+  {
+    id: 3,
+    direct: `"We live in Hong Kong," they said.`,
+    reported: `They said (that) they ______ in Hong Kong.`,
+    options: ["live", "are living", "have lived", "lived"],
+    answer: "D",
+    rule: "Simple present ➜ Simple past",
+    explanation: `"Live" is simple present. After "said", it becomes "lived".`
+  },
+  {
+    id: 4,
+    direct: `"I am reading a book," said Mary.`,
+    reported: `Mary said (that) she ______ a book.`,
+    options: ["reads", "read", "was reading", "is reading"],
+    answer: "C",
+    rule: "Present continuous ➜ Past continuous",
+    explanation: `"Am reading" is present continuous. It becomes "was reading" in reported speech.`
+  },
+  {
+    id: 5,
+    direct: `"The children are playing outside," said Mrs Chan.`,
+    reported: `Mrs Chan said (that) the children ______ outside.`,
+    options: ["were playing", "are playing", "played", "have played"],
+    answer: "A",
+    rule: "Present continuous ➜ Past continuous",
+    explanation: `"Are playing" is present continuous. It becomes "were playing" after a past reporting verb.`
+  },
+  {
+    id: 6,
+    direct: `"I am waiting for the bus," said Neil.`,
+    reported: `Neil said (that) he ______ for the bus.`,
+    options: ["waits", "waited", "is waiting", "was waiting"],
+    answer: "D",
+    rule: "Present continuous ➜ Past continuous",
+    explanation: `"Am waiting" is present continuous → "was waiting".`
+  },
+  {
+    id: 7,
+    direct: `"I have finished my homework," said Kate.`,
+    reported: `Kate said (that) she ______ her homework.`,
+    options: ["has finished", "had finished", "finished", "was finishing"],
+    answer: "B",
+    rule: "Present perfect ➜ Past perfect",
+    explanation: `"Have finished" is present perfect. It becomes "had finished" in reported speech.`
+  },
+  {
+    id: 8,
+    direct: `"My cat has eaten all the fish," said Wendy.`,
+    reported: `Wendy said (that) her cat ______ all the fish.`,
+    options: ["had eaten", "has eaten", "ate", "was eating"],
+    answer: "A",
+    rule: "Present perfect ➜ Past perfect",
+    explanation: `"Has eaten" is present perfect → "had eaten".`
+  },
+  {
+    id: 9,
+    direct: `"We have seen this film," said Tom and Ben.`,
+    reported: `Tom and Ben said (that) they ______ this film.`,
+    options: ["have seen", "saw", "had seen", "were seeing"],
+    answer: "C",
+    rule: "Present perfect ➜ Past perfect",
+    explanation: `"Have seen" is present perfect → "had seen".`
+  },
+  {
+    id: 10,
+    direct: `"I have been waiting for ages," said Sam.`,
+    reported: `Sam said (that) he ______ for ages.`,
+    options: ["has been waiting", "was waiting", "waited", "had been waiting"],
+    answer: "D",
+    rule: "Present perfect continuous ➜ Past perfect continuous",
+    explanation: `"Have been waiting" is present perfect continuous. It becomes "had been waiting".`
+  },
+  {
+    id: 11,
+    direct: `"She has been studying all day," said Peter.`,
+    reported: `Peter said (that) she ______ all day.`,
+    options: ["had been studying", "has been studying", "was studying", "studied"],
+    answer: "A",
+    rule: "Present perfect continuous ➜ Past perfect continuous",
+    explanation: `"Has been studying" → "had been studying".`
+  },
+  {
+    id: 12,
+    direct: `"They have been living here since 2010," said Lisa.`,
+    reported: `Lisa said (that) they ______ there since 2010.`,
+    options: ["have been living", "had been living", "were living", "lived"],
+    answer: "B",
+    rule: "Present perfect continuous ➜ Past perfect continuous",
+    explanation: `"Have been living" → "had been living". "Here" changes to "there".`
+  },
+  {
+    id: 13,
+    direct: `"I saw a great film yesterday," said John.`,
+    reported: `John said (that) he ______ a great film the day before.`,
+    options: ["saw", "has seen", "had seen", "was seeing"],
+    answer: "C",
+    rule: "Simple past ➜ Past perfect",
+    explanation: `"Saw" is simple past. It becomes "had seen". "Yesterday" becomes "the day before".`
+  },
+  {
+    id: 14,
+    direct: `"We got married in the spring," said Sandra.`,
+    reported: `Sandra said (that) they ______ married in the spring.`,
+    options: ["got", "have got", "were getting", "had got"],
+    answer: "D",
+    rule: "Simple past ➜ Past perfect",
+    explanation: `"Got" is simple past → "had got".`
+  },
+  {
+    id: 15,
+    direct: `"The dog ate my sandwich," said Ben.`,
+    reported: `Ben said (that) the dog ______ his sandwich.`,
+    options: ["had eaten", "ate", "has eaten", "was eating"],
+    answer: "A",
+    rule: "Simple past ➜ Past perfect",
+    explanation: `"Ate" is simple past → "had eaten". "My" → "his".`
+  },
+  {
+    id: 16,
+    direct: `"I was eating a sandwich," said Murray.`,
+    reported: `Murray said (that) he ______ a sandwich.`,
+    options: ["was eating", "had been eating", "ate", "has been eating"],
+    answer: "B",
+    rule: "Past continuous ➜ Past perfect continuous",
+    explanation: `"Was eating" is past continuous. It becomes "had been eating" in reported speech.`
+  },
+  {
+    id: 17,
+    direct: `"They were watching TV," said Anna.`,
+    reported: `Anna said (that) they ______ TV.`,
+    options: ["were watching", "watched", "had been watching", "have been watching"],
+    answer: "C",
+    rule: "Past continuous ➜ Past perfect continuous",
+    explanation: `"Were watching" → "had been watching".`
+  },
+  {
+    id: 18,
+    direct: `"I will call you tomorrow," said Jane.`,
+    reported: `Jane said (that) she ______ me the next day.`,
+    options: ["will call", "calls", "called", "would call"],
+    answer: "D",
+    rule: "Will ➜ Would",
+    explanation: `"Will" changes to "would" in reported speech. "Tomorrow" becomes "the next day".`
+  },
+  {
+    id: 19,
+    direct: `"We will go to the cinema," said Karen.`,
+    reported: `Karen said (that) they ______ to the cinema.`,
+    options: ["would go", "will go", "go", "went"],
+    answer: "A",
+    rule: "Will ➜ Would",
+    explanation: `"Will go" → "would go".`
+  },
+  {
+    id: 20,
+    direct: `"It will rain later," said the weather reporter.`,
+    reported: `The weather reporter said (that) it ______ later.`,
+    options: ["will rain", "would rain", "rains", "rained"],
+    answer: "B",
+    rule: "Will ➜ Would",
+    explanation: `"Will rain" → "would rain".`
+  },
+  {
+    id: 21,
+    direct: `"I can swim very well," said Tim.`,
+    reported: `Tim said (that) he ______ swim very well.`,
+    options: ["can", "will", "could", "would"],
+    answer: "C",
+    rule: "Can ➜ Could",
+    explanation: `"Can" changes to "could" in reported speech.`
+  },
+  {
+    id: 22,
+    direct: `"She can play the piano," said Mr Lee.`,
+    reported: `Mr Lee said (that) she ______ play the piano.`,
+    options: ["can", "may", "might", "could"],
+    answer: "D",
+    rule: "Can ➜ Could",
+    explanation: `"Can" → "could".`
+  },
+  {
+    id: 23,
+    direct: `"We can help you," they said.`,
+    reported: `They said (that) they ______ help me.`,
+    options: ["could", "can", "may", "must"],
+    answer: "A",
+    rule: "Can ➜ Could",
+    explanation: `"Can" → "could". "You" changes to "me".`
+  },
+  {
+    id: 24,
+    direct: `"It may rain tomorrow," said Dad.`,
+    reported: `Dad said (that) it ______ rain the next day.`,
+    options: ["may", "might", "can", "could"],
+    answer: "B",
+    rule: "May ➜ Might",
+    explanation: `"May" changes to "might" in reported speech.`
+  },
+  {
+    id: 25,
+    direct: `"I may be late," said Sarah.`,
+    reported: `Sarah said (that) she ______ be late.`,
+    options: ["may", "can", "might", "must"],
+    answer: "C",
+    rule: "May ➜ Might",
+    explanation: `"May" → "might".`
+  },
+  {
+    id: 26,
+    direct: `"I must finish this report," said Mr Wong.`,
+    reported: `Mr Wong said (that) he ______ finish that report.`,
+    options: ["must", "has to", "would", "had to"],
+    answer: "D",
+    rule: "Must ➜ Had to",
+    explanation: `"Must" changes to "had to" in reported speech.`
+  },
+  {
+    id: 27,
+    direct: `"You must wear a helmet," said the coach.`,
+    reported: `The coach said (that) I ______ wear a helmet.`,
+    options: ["had to", "must", "have to", "would"],
+    answer: "A",
+    rule: "Must ➜ Had to",
+    explanation: `"Must" → "had to". "You" changes to "I".`
+  },
+  {
+    id: 28,
+    direct: `"We must leave now," said Mum.`,
+    reported: `Mum said (that) they ______ leave then.`,
+    options: ["must", "had to", "have to", "would"],
+    answer: "B",
+    rule: "Must ➜ Had to",
+    explanation: `"Must" → "had to". "Now" becomes "then".`
+  },
+  {
+    id: 29,
+    direct: `"Shall I open the window?" he asked.`,
+    reported: `He asked if he ______ open the window.`,
+    options: ["shall", "will", "should", "would"],
+    answer: "C",
+    rule: "Shall ➜ Should",
+    explanation: `When "Shall I…?" is reported as an indirect question, "shall" becomes "should".`
+  },
+  {
+    id: 30,
+    direct: `"Shall we meet at six?" she asked.`,
+    reported: `She asked if they ______ meet at six.`,
+    options: ["shall", "will", "would", "should"],
+    answer: "D",
+    rule: "Shall ➜ Should",
+    explanation: `"Shall we…?" becomes "…if they should…" in reported speech.`
+  }
+];
+
+/* =========================================================
+   === CONSTANTS ===
+   ========================================================= */
+const TIME_PER_Q = 20;                 // seconds
+const RING_CIRC = 2 * Math.PI * 26;    // r = 26
+const LETTERS = ["A", "B", "C", "D"];
+
+/* =========================================================
+   === GAME STATE ===
+   ========================================================= */
+const state = {
+  currentIndex: 0,
+  score: 0,
+  answers: [],       // { qIndex, chosenIndex|null, correct, timedOut }
+  timerId: null,
+  timeLeft: TIME_PER_Q,
+  locked: false,
+  startTime: 0
+};
+
+/* =========================================================
+   === DOM REFERENCES ===
+   ========================================================= */
+const el = {
+  screens: {
+    start: document.getElementById("screen-start"),
+    quiz: document.getElementById("screen-quiz"),
+    summary: document.getElementById("screen-summary")
+  },
+  btnStart: document.getElementById("btn-start"),
+  historyLine: document.getElementById("history-line"),
+  counter: document.getElementById("counter"),
+  ringFg: document.getElementById("ring-fg"),
+  timerText: document.getElementById("timer-text"),
+  direct: document.getElementById("direct"),
+  reported: document.getElementById("reported"),
+  options: document.getElementById("options"),
+  feedback: document.getElementById("feedback"),
+  scoreNumber: document.getElementById("score-number"),
+  scorePercent: document.getElementById("score-percent"),
+  scoreMessage: document.getElementById("score-message"),
+  reviewSection: document.getElementById("review-section"),
+  btnAgain: document.getElementById("btn-again"),
+  btnReviewAll: document.getElementById("btn-review-all"),
+  allQuestions: document.getElementById("all-questions")
+};
+
+/* =========================================================
+   === SCREEN MANAGEMENT ===
+   ========================================================= */
+function showScreen(name) {
+  Object.values(el.screens).forEach(s => s.classList.remove("active"));
+  el.screens[name].classList.add("active");
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+/* =========================================================
+   === START SCREEN ===
+   ========================================================= */
+function showHistory() {
+  try {
+    const history = JSON.parse(localStorage.getItem("rs_game_history") || "[]");
+    if (history.length === 0) return;
+    const last = history[history.length - 1];
+    el.historyLine.textContent = `Last score: ${last.score}/30 — ${last.date}`;
+    el.historyLine.style.display = "block";
+  } catch (e) { /* ignore */ }
+}
+
+function saveResult(score) {
+  try {
+    const history = JSON.parse(localStorage.getItem("rs_game_history") || "[]");
+    history.push({
+      score,
+      date: new Date().toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })
+    });
+    // keep only last 5
+    while (history.length > 5) history.shift();
+    localStorage.setItem("rs_game_history", JSON.stringify(history));
+  } catch (e) { /* ignore */ }
+}
+
+el.btnStart.addEventListener("click", startGame);
+
+/* =========================================================
+   === GAME FLOW ===
+   ========================================================= */
+function startGame() {
+  state.currentIndex = 0;
+  state.score = 0;
+  state.answers = [];
+  state.locked = false;
+  showScreen("quiz");
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const q = QUESTIONS[state.currentIndex];
+
+  // header
+  el.counter.textContent = `Question ${state.currentIndex + 1} of ${QUESTIONS.length}`;
+
+  // sentences
+  el.direct.textContent = q.direct;
+  el.reported.innerHTML = q.reported.replace(
+    "______",
+    `<span class="blank">______</span>`
+  );
+
+  // options
+  el.options.innerHTML = "";
+  q.options.forEach((optText, i) => {
+    const btn = document.createElement("button");
+    btn.className = "option-btn";
+    btn.type = "button";
+    btn.dataset.index = i;
+    btn.innerHTML = `<span class="letter">${LETTERS[i]}</span><span class="opt-text"></span>`;
+    btn.querySelector(".opt-text").textContent = optText;
+    btn.addEventListener("click", () => selectAnswer(i));
+    el.options.appendChild(btn);
+  });
+
+  // reset feedback
+  el.feedback.className = "feedback";
+  el.feedback.innerHTML = "";
+
+  // reset timer
+  state.timeLeft = TIME_PER_Q;
+  state.locked = false;
+  updateTimerDisplay();
+  startTimer();
+}
+
+/* =========================================================
+   === TIMER ===
+   ========================================================= */
+function startTimer() {
+  clearInterval(state.timerId);
+  state.startTime = Date.now();
+  const duration = TIME_PER_Q * 1000;
+
+  state.timerId = setInterval(() => {
+    const elapsed = Date.now() - state.startTime;
+    const remaining = Math.max(0, duration - elapsed);
+    state.timeLeft = remaining / 1000;
+    updateTimerDisplay();
+    if (remaining <= 0) {
+      clearInterval(state.timerId);
+      handleTimeout();
+    }
+  }, 50);
+}
+
+function updateTimerDisplay() {
+  const secs = Math.ceil(state.timeLeft);
+  el.timerText.textContent = secs;
+
+  const ratio = state.timeLeft / TIME_PER_Q;
+  const offset = RING_CIRC * (1 - ratio);
+  el.ringFg.style.strokeDashoffset = offset;
+
+  let color = "#4f46e5";
+  if (state.timeLeft <= 5) color = "#dc2626";
+  else if (state.timeLeft <= 10) color = "#ea580c";
+
+  el.ringFg.style.stroke = color;
+  el.timerText.style.color = color;
+}
+
+/* =========================================================
+   === ANSWER HANDLING ===
+   ========================================================= */
+function selectAnswer(index) {
+  if (state.locked) return;
+  state.locked = true;
+  clearInterval(state.timerId);
+
+  const q = QUESTIONS[state.currentIndex];
+  const correctIndex = LETTERS.indexOf(q.answer);
+  const isCorrect = index === correctIndex;
+
+  if (isCorrect) state.score++;
+
+  state.answers.push({
+    qIndex: state.currentIndex,
+    chosenIndex: index,
+    correct: isCorrect,
+    timedOut: false
+  });
+
+  revealAnswer(index, false);
+}
+
+function handleTimeout() {
+  if (state.locked) return;
+  state.locked = true;
+
+  state.answers.push({
+    qIndex: state.currentIndex,
+    chosenIndex: null,
+    correct: false,
+    timedOut: true
+  });
+
+  revealAnswer(null, true);
+}
+
+function revealAnswer(chosenIndex, timedOut) {
+  const q = QUESTIONS[state.currentIndex];
+  const correctIndex = LETTERS.indexOf(q.answer);
+
+  // style option buttons
+  const buttons = el.options.querySelectorAll(".option-btn");
+  buttons.forEach((btn, i) => {
+    btn.disabled = true;
+    if (i === correctIndex) btn.classList.add("correct");
+    else if (i === chosenIndex) btn.classList.add("wrong");
+  });
+
+  // build feedback panel
+  const isCorrect = chosenIndex === correctIndex;
+  const correctText = q.options[correctIndex];
+  const fullSentence = q.reported.replace("______", correctText);
+
+  let html = "";
+  if (isCorrect) {
+    const praises = ["Great job!", "Well done!", "Perfect!", "You got it!"];
+    const praise = praises[Math.floor(Math.random() * praises.length)];
+    el.feedback.className = "feedback is-correct show";
+    html += `<div class="fb-header">✓ Correct! ${praise}</div>`;
+    html += `<p class="fb-answer"><strong>${LETTERS[correctIndex]}.</strong> ${escapeHtml(correctText)}</p>`;
+    html += `<p class="fb-why">${escapeHtml(q.explanation)}</p>`;
+  } else {
+    el.feedback.className = "feedback is-wrong show";
+    const head = timedOut ? `✗ Time's up!` : `✗ Not quite.`;
+    html += `<div class="fb-header">${head}</div>`;
+    if (timedOut) {
+      html += `<p class="fb-answer" style="color:#6b7280;font-size:13.5px;">You ran out of time.</p>`;
+    } else if (chosenIndex !== null) {
+      html += `<p class="fb-answer" style="color:#6b7280;font-size:13.5px;">You chose: <strong style="color:#dc2626;">${LETTERS[chosenIndex]}. ${escapeHtml(q.options[chosenIndex])}</strong></p>`;
+    }
+    html += `<p class="fb-answer"><strong>Correct answer:</strong> ${LETTERS[correctIndex]}. ${escapeHtml(correctText)}</p>`;
+    html += `<p class="fb-answer" style="font-size:14px;color:#374151;">${escapeHtml(fullSentence)}</p>`;
+    html += `<p class="fb-why"><strong>Why?</strong> ${escapeHtml(q.explanation)}</p>`;
+  }
+
+  html += `<span class="fb-rule">Tense Rule: ${escapeHtml(q.rule)}</span>`;
+
+  const isLast = state.currentIndex === QUESTIONS.length - 1;
+  const nextLabel = isLast ? "See Results ➜" : "Next Question ➜";
+  html += `<button id="btn-next" class="fb-next">${nextLabel}</button>`;
+
+  el.feedback.innerHTML = html;
+
+  document.getElementById("btn-next").addEventListener("click", nextQuestion);
+}
+
+function nextQuestion() {
+  if (state.currentIndex < QUESTIONS.length - 1) {
+    state.currentIndex++;
+    renderQuestion();
+  } else {
+    showSummary();
+  }
+}
+
+/* =========================================================
+   === KEYBOARD SHORTCUTS (A/B/C/D and 1/2/3/4) ===
+   ========================================================= */
+document.addEventListener("keydown", (e) => {
+  if (!el.screens.quiz.classList.contains("active")) return;
+  if (state.locked) {
+    // allow Enter to go to next
+    if (e.key === "Enter") {
+      const btn = document.getElementById("btn-next");
+      if (btn) btn.click();
+    }
+    return;
+  }
+  const key = e.key.toUpperCase();
+  const map = { "A": 0, "B": 1, "C": 2, "D": 3, "1": 0, "2": 1, "3": 2, "4": 3 };
+  if (key in map) {
+    const idx = map[key];
+    const btn = el.options.querySelectorAll(".option-btn")[idx];
+    if (btn) btn.click();
+  }
+});
+
+/* =========================================================
+   === SUMMARY ===
+   ========================================================= */
+function showSummary() {
+  clearInterval(state.timerId);
+  showScreen("summary");
+
+  const total = QUESTIONS.length;
+  const score = state.score;
+  const percent = Math.round((score / total) * 100);
+
+  el.scoreNumber.textContent = `${score} / ${total}`;
+  el.scorePercent.textContent = `${percent}%`;
+
+  let msg = "";
+  if (score >= 27) msg = "Outstanding! You have mastered reported speech.";
+  else if (score >= 22) msg = "Great work! Just a few rules to polish.";
+  else if (score >= 16) msg = "Good effort. Review the rules below.";
+  else msg = "Keep practising. Focus on the rules below.";
+  el.scoreMessage.textContent = msg;
+
+  saveResult(score);
+
+  // ---- Build review section ----
+  let html = "";
+
+  const wrongAnswers = state.answers.filter(a => !a.correct);
+
+  if (wrongAnswers.length === 0) {
+    html += `<div class="perfect-msg">🎉 Perfect! No mistakes to review.</div>`;
+  } else {
+    html += `<h3 class="section-head">Questions to Review (${wrongAnswers.length})</h3>`;
+    wrongAnswers.forEach(ans => {
+      const q = QUESTIONS[ans.qIndex];
+      const correctIndex = LETTERS.indexOf(q.answer);
+      const correctText = q.options[correctIndex];
+      html += `<div class="review-item">`;
+      html += `<div class="q-label">Question ${q.id}</div>`;
+      html += `<p class="q-direct">${escapeHtml(q.direct)}</p>`;
+      if (ans.timedOut) {
+        html += `<p class="q-choice">Your answer: <em>Time out</em> ✗</p>`;
+      } else if (ans.chosenIndex !== null) {
+        html += `<p class="q-choice">Your answer: ${LETTERS[ans.chosenIndex]}. ${escapeHtml(q.options[ans.chosenIndex])} ✗</p>`;
+      }
+      html += `<p class="q-correct">Correct: ${LETTERS[correctIndex]}. ${escapeHtml(correctText)} ✓</p>`;
+      html += `<p class="q-explain">${escapeHtml(q.explanation)}</p>`;
+      html += `<span class="q-rule">${escapeHtml(q.rule)}</span>`;
+      html += `</div>`;
+    });
+  }
+
+  // ---- Weak areas grouped by rule ----
+  if (wrongAnswers.length > 0) {
+    const counts = {};
+    wrongAnswers.forEach(a => {
+      const rule = QUESTIONS[a.qIndex].rule;
+      counts[rule] = (counts[rule] || 0) + 1;
+    });
+
+    // Sort by count descending
+    const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+
+    html += `<h3 class="section-head">Your Weak Areas</h3>`;
+    html += `<ul class="weak-list">`;
+    sorted.forEach(([rule, count]) => {
+      html += `<li><span>${escapeHtml(rule)}</span><span class="count">${count} wrong</span></li>`;
+    });
+    html += `</ul>`;
+
+    // Tips per weak rule
+    const tips = {
+      "Simple present ➜ Simple past": "Remember: simple present verbs change to simple past (like → liked, play → played).",
+      "Present continuous ➜ Past continuous": "Present continuous (am/is/are + -ing) becomes past continuous (was/were + -ing).",
+      "Present perfect ➜ Past perfect": "Present perfect (have/has + past participle) becomes past perfect (had + past participle).",
+      "Present perfect continuous ➜ Past perfect continuous": "have/has been + -ing becomes had been + -ing.",
+      "Simple past ➜ Past perfect": "Simple past becomes past perfect (had + past participle).",
+      "Past continuous ➜ Past perfect continuous": "was/were + -ing becomes had been + -ing.",
+      "Will ➜ Would": "The modal 'will' always changes to 'would' in reported speech.",
+      "Can ➜ Could": "The modal 'can' always changes to 'could'.",
+      "May ➜ Might": "The modal 'may' changes to 'might' when the reporting verb is in the past.",
+      "Must ➜ Had to": "The modal 'must' changes to 'had to' in reported speech.",
+      "Shall ➜ Should": "In indirect questions with 'Shall I/we…?', 'shall' becomes 'should'."
+    };
+
+    sorted.forEach(([rule]) => {
+      if (tips[rule]) {
+        html += `<div class="tip-box"><strong>Revise:</strong> ${escapeHtml(rule)}<br>${escapeHtml(tips[rule])}</div>`;
+      }
+    });
+  }
+
+  el.reviewSection.innerHTML = html;
+
+  // reset the review-all section
+  el.allQuestions.classList.remove("show");
+  el.allQuestions.innerHTML = "";
+  el.btnReviewAll.textContent = "Review All Questions";
+}
+
+/* =========================================================
+   === REVIEW ALL QUESTIONS ===
+   ========================================================= */
+el.btnReviewAll.addEventListener("click", () => {
+  const isShown = el.allQuestions.classList.contains("show");
+  if (isShown) {
+    el.allQuestions.classList.remove("show");
+    el.btnReviewAll.textContent = "Review All Questions";
+    return;
+  }
+
+  let html = "";
+  QUESTIONS.forEach(q => {
+    const correctIndex = LETTERS.indexOf(q.answer);
+    const correctText = q.options[correctIndex];
+    const fullSentence = q.reported.replace("______", correctText);
+    html += `<div class="all-q-item">`;
+    html += `<div class="direct">${escapeHtml(q.direct)}</div>`;
+    html += `<div class="correct-line">✓ ${escapeHtml(fullSentence)}</div>`;
+    html += `<span class="rule-line">${escapeHtml(q.rule)}</span>`;
+    html += `</div>`;
+  });
+  el.allQuestions.innerHTML = html;
+  el.allQuestions.classList.add("show");
+  el.btnReviewAll.textContent = "Hide All Questions";
+  el.allQuestions.scrollIntoView({ behavior: "smooth", block: "start" });
+});
+
+/* =========================================================
+   === PLAY AGAIN ===
+   ========================================================= */
+el.btnAgain.addEventListener("click", () => {
+  showHistory();
+  startGame();
+});
+
+/* =========================================================
+   === UTILITY ===
+   ========================================================= */
+function escapeHtml(str) {
+  return String(str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+/* =========================================================
+   === INIT ===
+   ========================================================= */
+showHistory();
+</script>
+
+</body>
+</html>
